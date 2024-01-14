@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import classes from './SearchBar.module.css';
 import PropTypes from 'prop-types';
+import { FaSearch } from 'react-icons/fa';
 
 const SearchBar = ({ onSubmit }) => {
   const [searchQuery, setSearchQuery] = useState('');
@@ -14,7 +15,9 @@ const SearchBar = ({ onSubmit }) => {
     <header className={classes.searchbar}>
       <form className={classes.searchForm} onSubmit={handleSubmit}>
         <button type="submit" className={classes.searchFormButton}>
-          <span className={classes.searchFormButtonLabel}>Search</span>
+          <span className={classes.searchFormButtonLabel}>
+            <FaSearch />
+          </span>
         </button>
         <input
           className={classes.searchFormInput}
