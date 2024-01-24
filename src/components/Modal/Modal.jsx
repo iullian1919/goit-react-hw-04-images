@@ -1,31 +1,28 @@
+import React from 'react';
 import { BackDrop } from 'components/Backdrop/Backdrop';
-import { useEffect } from 'react';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faTimes } from '@fortawesome/free-solid-svg-icons';
+import styles from './Modal.module.css';
+
 const Modal = ({ closeModal, src }) => {
-  useEffect(() => {
-    const onEscape = ev => {
-      if (ev.code !== 'Escape') {
-        return;
-      }
-      closeModal('');
-    };
-
-    window.addEventListener('keydown', onEscape);
-
-    return () => {
-      window.removeEventListener('keydown', onEscape);
-    };
-    // 🔽Так захотів eslint😁
-  }, [closeModal]);
+  const handleClose = () => {
+    closeModal('');
+  };
 
   const handleClick = ev => {
     if (ev.target === ev.currentTarget) {
-      closeModal('');
+      handleClose();
     }
   };
 
   return (
     <BackDrop onClick={handleClick}>
-      <img src={src} alt="modalImg" />
+      <div className={styles.modal}>
+        <img className={styles.modalImage} src={src} alt="modalImg" />
+        <button className={styles.closeButton} onClick={handleClose}>
+          <FontAwesomeIcon icon={faTimes} />
+        </button>
+      </div>
     </BackDrop>
   );
 };

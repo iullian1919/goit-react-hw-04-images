@@ -1,4 +1,5 @@
 import styled from 'styled-components';
+
 export const HeaderStyled = styled.header`
   top: 0;
   left: 0;

@@ -1,4 +1,5 @@
 import ImageGalleryItem from 'components/ImageGalleryItem/ImageGalleryItem';
+
 import { Gallery } from './Gallery.styled';
 const ImageGallery = ({ images, openModal }) => {
   return (

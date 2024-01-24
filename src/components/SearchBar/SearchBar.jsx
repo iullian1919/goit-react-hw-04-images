@@ -7,6 +7,7 @@ import {
   SpanBtnStyled,
   InputStyled,
 } from './SearchBar.styled';
+
 const Searchbar = ({ toSubmit }) => {
   const [query, setQuery] = useState('');
   const handleInput = ev => {

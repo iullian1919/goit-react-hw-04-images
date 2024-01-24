@@ -1,4 +1,5 @@
 import { ItemStyled, ImageStyled } from './Item.styled';
+
 const ImageGalleryItem = ({ image, handleClick }) => {
   return (
     <ItemStyled>

@@ -1,5 +1,6 @@
 import { BackDrop } from 'components/Backdrop/Backdrop';
 import { ColorRing } from 'react-loader-spinner';
+
 export const Loader = () => {
   return (
     <BackDrop>
