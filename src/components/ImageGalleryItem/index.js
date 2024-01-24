@@ -1,3 +1,3 @@
-import ImageGalleryItem from './ImageGalleryItem';
+import ImageGallery from 'components/ImageGallery/ImageGallery';
 
-export default ImageGalleryItem;
+export default ImageGallery;

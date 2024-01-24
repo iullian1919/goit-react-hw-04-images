@@ -1,40 +1,39 @@
-import React, { useState } from 'react';
-import classes from './SearchBar.module.css';
-import PropTypes from 'prop-types';
-import { FaSearch } from 'react-icons/fa';
-
-const SearchBar = ({ onSubmit }) => {
-  const [searchQuery, setSearchQuery] = useState('');
-
-  const handleSubmit = e => {
-    e.preventDefault();
-    onSubmit(searchQuery);
+import { useState } from 'react';
+import { CiSearch } from 'react-icons/ci';
+import {
+  SearchFormStyled,
+  SearchFormBtn,
+  HeaderStyled,
+  SpanBtnStyled,
+  InputStyled,
+} from './SearchBar.styled';
+const Searchbar = ({ toSubmit }) => {
+  const [query, setQuery] = useState('');
+  const handleInput = ev => {
+    setQuery(ev.target.value);
   };
-
+  const handleSubmit = ev => {
+    ev.preventDefault();
+    toSubmit(query);
+  };
   return (
-    <header className={classes.searchbar}>
-      <form className={classes.searchForm} onSubmit={handleSubmit}>
-        <button type="submit" className={classes.searchFormButton}>
-          <span className={classes.searchFormButtonLabel}>
-            <FaSearch />
-          </span>
-        </button>
-        <input
-          className={classes.searchFormInput}
+    <HeaderStyled>
+      <SearchFormStyled onSubmit={handleSubmit}>
+        <SearchFormBtn type="submit">
+          <CiSearch size={30} />
+          <SpanBtnStyled>Search</SpanBtnStyled>
+        </SearchFormBtn>
+
+        <InputStyled
+          onInput={handleInput}
           type="text"
           autoComplete="off"
           autoFocus
           placeholder="Search images and photos"
-          value={searchQuery}
-          onChange={e => setSearchQuery(e.target.value)}
         />
-      </form>
-    </header>
+      </SearchFormStyled>
+    </HeaderStyled>
   );
 };
 
-SearchBar.propTypes = {
-  onSubmit: PropTypes.func.isRequired,
-};
-
-export default SearchBar;
+export default Searchbar;

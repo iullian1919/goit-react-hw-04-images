@@ -1,74 +1,72 @@
-import React, { useState, useEffect } from 'react';
-import SearchBar from './SearchBar';
+import Searchbar from './SearchBar';
+import { requestImage } from 'service/request';
 import ImageGallery from './ImageGallery';
-import Button from './Button';
-import Loader from './Loader';
-import Modal from './Modal';
-import classes from './App.module.css';
+import Button from './Button/Button';
+import { Loader } from './Loader/Loader';
+import { ErrorStyled } from './ErrorMessage/Error.styled';
+import Modal from './Modal/Modal';
+import { AppStyled } from './AppStyled/AppStyled';
+import { useEffect, useState } from 'react';
 
 const App = () => {
-  const [searchQuery, setSearchQuery] = useState('');
   const [images, setImages] = useState([]);
+  const [query, setQuery] = useState('');
   const [page, setPage] = useState(1);
+  const [error, setError] = useState('');
+  const [isLoadMore, setIsLoadMore] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-  const [selectedImage, setSelectedImage] = useState(null);
+  const [isEmpty, setIsEmpty] = useState(false);
+  const [url, setUrl] = useState('');
 
   useEffect(() => {
-    if (!searchQuery) return;
-
-    const fetchImages = async () => {
-      try {
-        setIsLoading(true);
-
-        const response = await fetch(
-          `https://pixabay.com/api/?q=${searchQuery}&page=${page}&key=41689028-c746e1e6e71d95932f933e2cb&image_type=photo&orientation=horizontal&per_page=12`
-        );
-
-        if (!response.ok) {
-          throw new Error('Failed to fetch images');
+    if (!query) return;
+    setIsLoading(true);
+    requestImage(query, page)
+      .then(({ hits, totalHits }) => {
+        if (!hits.length) {
+          setIsEmpty(true);
+          setIsLoadMore(false);
+          return;
         }
-
-        const data = await response.json();
-        setImages(prevImages => [...prevImages, ...data.hits]);
-        setPage(prevPage => prevPage + 1);
-      } catch (error) {
-        console.error(error);
-      } finally {
+        setImages(prev => {
+          return [...prev, ...hits];
+        });
+        setIsLoadMore(page < Math.ceil(totalHits / 12));
+      })
+      .catch(err => {
+        console.log('err', err);
+        setError(err);
+      })
+      .finally(() => {
         setIsLoading(false);
-      }
-    };
-
-    fetchImages();
-  }, [searchQuery, page]);
-
-  const handleSearchSubmit = query => {
-    setSearchQuery(query);
-    setImages([]);
+      });
+  }, [page, query]);
+  const handleSubmit = request => {
+    if (request === query) {
+      return;
+    }
+    setQuery(request);
     setPage(1);
+    setImages([]);
+    setError('');
+    setIsEmpty(false);
   };
-
-  const handleLoadMore = () => {
-    setPage(prevPage => prevPage + 1);
+  const loadMore = () => {
+    setPage(prev => prev + 1);
   };
-
-  const handleCloseModal = () => {
-    setSelectedImage(null);
+  const openModal = url => {
+    setUrl(url);
   };
-
   return (
-    <div className={classes.App}>
-      <SearchBar onSubmit={handleSearchSubmit} />
-      <ImageGallery images={images} />
+    <AppStyled>
       {isLoading && <Loader />}
-      {images.length > 0 && (
-        <Button onClick={handleLoadMore} disabled={isLoading} />
-      )}
-      <Modal
-        isOpen={selectedImage !== null}
-        onClose={handleCloseModal}
-        imageUrl={selectedImage}
-      />
-    </div>
+      <Searchbar toSubmit={handleSubmit} />
+      {isEmpty && <ErrorStyled>Sorry. There are no images ... </ErrorStyled>}
+      {url && <Modal src={url} closeModal={openModal} />}
+      {error && <ErrorStyled>Sorry. {error}...</ErrorStyled>}
+      <ImageGallery images={images} openModal={openModal} />
+      {isLoadMore && <Button onClick={loadMore}>Load More</Button>}
+    </AppStyled>
   );
 };
 

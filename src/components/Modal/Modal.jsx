@@ -1,25 +1,33 @@
-import React from 'react';
-import classes from './Modal.module.css';
-import PropTypes from 'prop-types';
+import { BackDrop } from 'components/Backdrop/Backdrop';
+import { useEffect } from 'react';
+const Modal = ({ closeModal, src }) => {
+  useEffect(() => {
+    const onEscape = ev => {
+      if (ev.code !== 'Escape') {
+        return;
+      }
+      closeModal('');
+    };
 
-const Modal = ({ isOpen, onClose, largeImageURL }) => {
-  console.log(onClose);
+    window.addEventListener('keydown', onEscape);
+
+    return () => {
+      window.removeEventListener('keydown', onEscape);
+    };
+    // 🔽Так захотів eslint😁
+  }, [closeModal]);
+
+  const handleClick = ev => {
+    if (ev.target === ev.currentTarget) {
+      closeModal('');
+    }
+  };
+
   return (
-    isOpen &&
-    largeImageURL && (
-      <div className={classes.overlay} onClick={onClose}>
-        <div className={classes.modal}>
-          <img src={largeImageURL} alt="Large" />
-        </div>
-      </div>
-    )
+    <BackDrop onClick={handleClick}>
+      <img src={src} alt="modalImg" />
+    </BackDrop>
   );
-};
-
-Modal.propTypes = {
-  isOpen: PropTypes.bool.isRequired,
-  onClose: PropTypes.func.isRequired,
-  largeImageURL: PropTypes.string,
 };
 
 export default Modal;
