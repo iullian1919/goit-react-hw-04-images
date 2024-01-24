@@ -2,7 +2,7 @@ import React from 'react';
 import { BackDrop } from 'components/Backdrop/Backdrop';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTimes } from '@fortawesome/free-solid-svg-icons';
-import styles from './Modal.module.css';
+import css from './Modal.module.css';
 
 const Modal = ({ closeModal, src }) => {
   const handleClose = () => {
@@ -17,9 +17,9 @@ const Modal = ({ closeModal, src }) => {
 
   return (
     <BackDrop onClick={handleClick}>
-      <div className={styles.modal}>
-        <img className={styles.modalImage} src={src} alt="modalImg" />
-        <button className={styles.closeButton} onClick={handleClose}>
+      <div className={css.modal}>
+        <img className={css.modalImage} src={src} alt="modalImg" />
+        <button className={css.closeButton} onClick={handleClose}>
           <FontAwesomeIcon icon={faTimes} />
         </button>
       </div>
