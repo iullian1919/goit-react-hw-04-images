@@ -29,8 +29,11 @@
   right: 10px;
   background-color: rgb(59, 143, 245);
   border: none;
-  padding: 10px;
+  padding-left: 7px;
   cursor: pointer;
   color: #ffffff;
   border-radius: 50%;
+  width: 30px;
+  height: 30px;
+  box-sizing: border-box;
 }
